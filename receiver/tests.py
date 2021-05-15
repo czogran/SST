@@ -18,22 +18,12 @@ start_time = time.time()
 uptime = start_time
 dwntime = start_time
 prnt = False
-prev_time = time.time()
-
-number = 0
+prev_time = 0
 while True:
-
     # time.sleep(1)
     snap = GPIO.input(detect)
-    print(snap, end = '')
+    prnt(snap, end='')
     time.sleep(0.1)
-
-    # print(time.time())
-    if (time.time()-prev_time)>1:
-        prev_time = time.time()
-        number +=1
-        print("  ",number)
-
 
 print("ok")
 
