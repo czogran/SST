@@ -1,6 +1,8 @@
 import RPi.GPIO as GPIO
 import time
 
+print("transmitter")
+
 GPIO.cleanup()
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -35,18 +37,18 @@ pwm_value.start(75)
 pwm_value2 = GPIO.PWM(pwm_output2, 1000)
 pwm_value2.start(0)
 
-sleep_time=0.0025
+sleep_time=0.04
 
-# while True:
-GPIO.output(output1, GPIO.HIGH)
-GPIO.output(output2, GPIO.LOW)
-    # time.sleep(sleep_time)
-    # GPIO.output(output1, GPIO.LOW)
-    # GPIO.output(output2, GPIO.LOW)
-    # time.sleep(sleep_time)
+
 while True:
-    pass
-
+    print("on")
+    GPIO.output(output1, GPIO.HIGH)
+    GPIO.output(output2, GPIO.LOW)
+    time.sleep(sleep_time)
+    print("off")
+    GPIO.output(output1, GPIO.LOW)
+    GPIO.output(output2, GPIO.LOW)
+    time.sleep(sleep_time)
 
 # pwm_value = GPIO.PWM(pwm_output, 1000)
 # pwm_value.start(pwm_value)
