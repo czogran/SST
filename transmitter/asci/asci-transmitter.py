@@ -16,8 +16,6 @@ file = open('message.txt')
 fileContent = file.read().upper()
 file.close()
 
-# print(bin(int.from_bytes(" ".encode(), 'big')))
-
 
 def transmit(bite):
     sleepTime = 0.1
@@ -30,21 +28,14 @@ def transmit(bite):
 
 code = bin(int.from_bytes(fileContent.encode(), 'big'))
 
-# code= code[2:]
-code= '0'+code[2:]
-# print(code)
-print("code")
-print(code)
+# Removing incorrect sequence start
+code = '0' + code[2:]
 
+# Start frequency
 for i in range(10):
     transmit('1')
 
 for bite in str(code):
-    # try:
-    #     print(bite)
-
     transmit(bite)
-    # except:
-    #     pass
 
 GPIO.cleanup()

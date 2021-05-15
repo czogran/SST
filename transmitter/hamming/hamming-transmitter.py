@@ -21,11 +21,7 @@ file.close()
 
 def transmit(bite):
     sleepTime = 0.075
-    # print(bite)
-    # print(bite==1)
-    # print(bite=='1')
-    # print(bite==0)
-    # print(bite=='0')
+
     if bite == 1:
         transmitHigh(sleepTime)
     elif bite == 0:
