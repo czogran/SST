@@ -17,7 +17,10 @@ file = open('message.txt')
 fileContent = file.read().upper()
 file.close()
 
-factor = 0.01
+# Record-> factor = 0.02
+factor = 0.05
+print(factor)
+
 
 dotLength = 1 * factor
 lineLength = 3 * factor
@@ -30,7 +33,6 @@ prev = time.time()
 
 def transmit(code):
     global prev
-    # print(time.time()-prev)
     prev = time.time()
     if code == ' ':
         # print("space")
