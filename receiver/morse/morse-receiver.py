@@ -5,11 +5,11 @@ from morseReceiverDictionary import morseReceiverDictionary
 
 GPIO.setmode(GPIO.BCM)
 detectPin = 14
-dot = 0.01
+dot = 0.05
 sanity = 0.005
 prev = True
 char = ""
-word = ""
+sentence = ""
 GPIO.setup(detectPin, GPIO.IN)
 start_time = time.time()
 uptime = start_time
@@ -27,7 +27,7 @@ while True:
                 print(char)
                 try:
                     print(morseReceiverDictionary[char])
-                    word = word + morseReceiverDictionary[char]
+                    sentence = sentence + morseReceiverDictionary[char]
                 except KeyError:
                     print(char)
                 char = ""
@@ -41,12 +41,12 @@ while True:
         print(char)
         try:
             print(morseReceiverDictionary[char])
-            word = word + morseReceiverDictionary[char]
+            sentence = sentence + morseReceiverDictionary[char]
         except KeyError:
             print(char)
         char = ""
-        print(word)
-        word = ""
+        print(sentence)
+        sentence = ""
         prnt = False
 print("ok")
 

@@ -10,7 +10,7 @@ from config.gpioConfig import transmitHigh, transmitLow
 import RPi.GPIO as GPIO
 import time
 
-print("ASCII TRANSMITTER")
+print("ASCII TRANSMITTER WITH FLAG ON THE START")
 
 file = open('message.txt')
 fileContent = file.read().upper()
@@ -18,8 +18,8 @@ file.close()
 
 
 def transmit(bite):
-    sleepTime = 0.1
-    print(bite)
+    sleepTime = 0.5
+    # print(bite)
     if bite == '1':
         transmitHigh(sleepTime)
     elif bite == '0':
@@ -31,11 +31,15 @@ code = bin(int.from_bytes(fileContent.encode(), 'big'))
 # Removing incorrect sequence start
 code = '0' + code[2:]
 
-# Start frequency
-for i in range(10):
-    transmit('1')
+# print("code length",len(code)%8)
+# code=1010101010101
 
-for bite in str(code):
+
+for index,bite in enumerate(str(code)):
+    if index % 8 == 0:
+        print(bite)
+        transmit(1)
+
     transmit(bite)
 
 GPIO.cleanup()
