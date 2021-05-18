@@ -43,25 +43,14 @@ def hammingCodes(data):
     k = 1  # 2 to the power kth parity bit
     while i < n:
         k = 2. ** i
-        j = 1
         total = 0
-        while j * k - 1 < len(list1):
-            if j * k - 1 == len(list1) - 1:  # if lower index is last one to be considered in sub list then
-                lower_index = j * k - 1
-                temp = list1[int(lower_index):len(list1)]
-            elif (j + 1) * k - 1 >= len(list1):
-                lower_index = j * k - 1
-                temp = list1[int(lower_index):len(list1)]  # if list's size is smaller than boundary point
-            elif (j + 1) * k - 1 < len(list1) - 1:
-                lower_index = (j * k) - 1
-                upper_index = (j + 1) * k - 1
-                temp = list1[int(lower_index):int(upper_index)]
-
-            total = total + sum(int(e) for e in temp)  # do the sum of sub list for corresponding parity bits
-            j += 2  # increment by 2 beacause we want alternative pairs of numberss from list
+        for j in range(int(k), len(list1) + 1, 2 * int(k)):
+            for p in range(0, int(k)):
+                if j - 1 + p >= len(list1):
+                    break
+                total = total + int(list1[j - 1 + p])
         if total % 2 > 0:
-            list1[int(
-                k) - 1] = 1  # to check even parity summing up all the elements in sublist and if summ is even than even parity else odd parity
+            list1[int(k) - 1] = 1  # to check even parity summing up all the elements in sublist and if summ is even than even parity else odd parity
         i += 1
     return list1
 
@@ -73,15 +62,12 @@ def hammingCorrection(data):
     errorthBit = 0
     while i < n:
         k = 2. ** i
-        print("k: "+str(k))
         total = 0
         for j in range(int(k), len(list1) + 1, 2*int(k)):
-            print("j:" + str(j))
             for p in range(0, int(k)):
                 if j - 1 + p >= len(list1):
                     break
                 total = total + int(list1[j - 1 + p])
-                print(j - 1 + p)
         if total % 2 > 0:
             errorthBit = errorthBit + k  # to check even parity summing up all the elements in sublist and if summ is even than even parity else odd parity
         i += 1
@@ -107,9 +93,9 @@ def hammingCorrection(data):
     return list2
 #01010011
 print("RECEIVER")
-print(hammingCodes('01010011'))
 #mess = '000110100011'
-mess = '100110100011'
+mess = hammingCodes('01000010')
+print(mess)
 mess = hammingCorrection(mess)
 print(mess)
 GPIO.setmode(GPIO.BCM)
