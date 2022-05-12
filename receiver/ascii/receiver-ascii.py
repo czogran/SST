@@ -2,16 +2,21 @@ import RPi.GPIO as GPIO
 import time
 import sys
 
+print("ASCII RECEIVER")
+
 GPIO.setmode(GPIO.BCM)
 detectPin = 14
 GPIO.setup(detectPin, GPIO.IN)
 
+# bite length
 samplesPerByte = 5
 samplingPeriod = 0.2 / samplesPerByte
+
 buffer = []
 message = ""
 start = time.time()
 begin = False
+
 while time.time() - start < 10:
     snap = GPIO.input(detectPin)
     if snap:
@@ -22,12 +27,15 @@ while time.time() - start < 10:
         bit = int(round(sum(buffer) / samplesPerByte))
         if begin:
             message = message + str(bit)
+            # when one byte comes
             if len(message) == 8:
                 try:
                     print(message)
                     n = int(message, 2)
+                    # decoding
                     print(n.to_bytes((n.bit_length() + 7) // 8, 'big').decode())
                 except:
+                    # error in decoding
                     print('Oooops', sys.exc_info())
                 message = ""
         elif bit == 1:

@@ -150,10 +150,10 @@ while time.time() - start < 10:
                     #print(hammingCorrection(mess))
                     mess = hammingCorrection(mess)
                     #print(mess)
-                    word = ""
+                    sentence = ""
                     for m in mess:
-                        word = word + m
-                    n = int(word, 2)
+                        sentence = sentence + m
+                    n = int(sentence, 2)
                     print(n.to_bytes((n.bit_length() + 7) // 8, 'big').decode())
                 except:
                     print('Oooops', sys.exc_info())

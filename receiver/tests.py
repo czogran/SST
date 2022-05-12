@@ -22,7 +22,7 @@ prev_time = 0
 while True:
     # time.sleep(1)
     snap = GPIO.input(detect)
-    prnt(snap, end='')
+    print(snap, end='')
     time.sleep(0.1)
 
 print("ok")

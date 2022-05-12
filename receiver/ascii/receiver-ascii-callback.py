@@ -1,46 +1,40 @@
 import RPi.GPIO as GPIO
 import time
-import sys
 
+# setup gpio pins
 GPIO.setmode(GPIO.BCM)
 detectPin = 14
 GPIO.setup(detectPin, GPIO.IN)
 
-samplesPerByte = 5
-samplingPeriod = 0.2 / samplesPerByte
 buffer = []
 message = ""
 start = time.time()
-begin = False
-while time.time() - start < 10:
-    snap = GPIO.input(detectPin)
-    if snap:
-        buffer.append(0)
-    else:
-        buffer.append(1)
-    if len(buffer) == samplesPerByte:
-        bit = int(round(sum(buffer) / samplesPerByte))
-        if begin:
-            message = message + str(bit)
-            if len(message) == 8:
-                try:
-                    print(message)
-                    n = int(message, 2)
-                    print(n.to_bytes((n.bit_length() + 7) // 8, 'big').decode())
-                except:
-                    print('Oooops', sys.exc_info())
-                message = ""
-        elif bit == 1:
-            message = message + '1'
-        buffer = []
-    # Detect start sequence
-    if message == '1111111111' and not begin:
-        begin = True
-        message = ""
-        print('start')
-    else:
-        start = time.time()
-    time.sleep(samplingPeriod)
-print("ok")
 
-GPIO.cleanup()
+#duration of one bite
+bitLength = 1000
+debounceTime = 2
+
+# Define a threaded callback function to run in another thread when events are detected
+def my_callback(channel):
+    global prevTime
+    global char
+    global sentence
+    global word
+    currentTime = time.time()
+
+    timeDiff = currentTime - prevTime
+
+    # Rising edge, laser from on to off (it is reversed!)
+    if GPIO.input(channel):
+        bits = int(round(sum(timeDiff) / bitLength))
+
+        for bit in range(bits):
+            buffer.append(1)
+    # Falling edge, laser from off to on
+    else:
+        bits = int(round(sum(timeDiff) / bitLength))
+        for bit in range(bits):
+            buffer.append(0)
+    prevTime = currentTime
+
+GPIO.add_event_detect(detectPin, GPIO.BOTH, callback=my_callback, bouncetime=debounceTime)
